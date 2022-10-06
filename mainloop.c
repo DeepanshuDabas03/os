@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <unistd.h>     
 #include <sys/wait.h>
-// #include <fcntl.h>
 #define f(i,n) for(i=0;i<n;i++)
 #define totalcommands 4
 #define cwd(PWD) getcwd(PWD, sizeof(PWD))
@@ -22,7 +21,7 @@ int cd(char **array){
     }
     else if (chdir(array[1]) < 0){
         //if we are not able to change our directory we need to produce a error
-		perror("Error:");
+		perror("Error");
 	}
     cwd(pwd);
     if(strcmp(pwd,"/")==0){
@@ -72,6 +71,31 @@ int echo(char ** array){
 int exitfunc(char ** array){
 	return 2;
 }
+int start_process(char ** array){
+    
+    pid_t p1, p2;
+    p1= fork();
+    if (p1 == 0){
+	    char commandpath[2048];
+	    strcpy(commandpath, commands);
+	    strcat(commandpath, array[0]);	
+	    if ( execv( commandpath, array ) == -1){
+		    printf("Error: Command Not found\n");
+	    }
+	    exit(EXIT_SUCCESS);	
+    }
+    else if (p1 < 0){
+		perror("Error:Process can't be created");
+    }
+    else{      
+        int status;     
+        do{
+            p2 = waitpid(p1, &status, WUNTRACED);
+        } 
+        while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+    return 1;
+}
 int (* internalfunctions[]) (char **) = {&cd,&pwdfunc,&echo,&exitfunc};
 int runcommands(char ** array){
     int i;
@@ -82,6 +106,7 @@ int runcommands(char ** array){
 		    return (* internalfunctions[i])(array);
 		}
 	}
+    return start_process(array);
 }    
 char * getinput(void){
         int total = 2048;
@@ -120,7 +145,7 @@ char ** split_input(char * command){
 int main(int argc, char ** argv){
 	cwd(pwd);	
 	strcpy(commands, pwd);
-	strcat(commands,"/cmds/");
+	strcat(commands,"/");
     char split_on[2]="/";
     int allowedsize = 128;
     char ** temp_array = malloc(sizeof(char *) * allowedsize);
@@ -142,6 +167,7 @@ int main(int argc, char ** argv){
         printf(COLOR_BOLD_BLUE"%s]" COLOR_CYAN "$ "COLOR_OFF,mi);
         userinput = getinput();
 		if ( strcmp(userinput, "") == 0 ){
+            // incase of empty input
 			continue;
 		}
         input = split_input(userinput);
