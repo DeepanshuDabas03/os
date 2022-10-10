@@ -91,6 +91,7 @@ int start_process(char ** array){
         int status;     
         do{
             p2 = waitpid(p1, &status, WUNTRACED);
+            //WUNTRACED flag to request status information from stopped processes as well as processes that have terminated.
         } 
         while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
@@ -103,18 +104,18 @@ int runcommands(char ** array){
     {
 	    if ( strcmp(array[0], command[i]) == 0 )
         {
+            // If the process is in internal functions,run that function
 		    return (* internalfunctions[i])(array);
 		}
 	}
+    //else start a process for running external functions.
     return start_process(array);
 }    
-char * getinput(void){
-        int total = 2048;
-        int idx = 0;
+char * getinput(){
         char * command = (char *)malloc(sizeof(char) * 2048);
+        //defining array for getting user input into.Since we can't have variable array for a user input, we restricted size to 2048
         char c;
-
-        // Read the command line character by character
+        int idx = 0,total = 2048;
         c = getchar();
         while (c != EOF && c != '\n'){
                 command[idx] = c;
@@ -122,24 +123,24 @@ char * getinput(void){
                         total += 128;
                         command = realloc(command, total);
                 }
-                idx++;
+                ++idx;
                 c = getchar();
+                //getting input character by character
         }
         return command;
 }
 char ** split_input(char * command){
-        int idx = 0;
-        int allowedsize = 128;
-        char ** temp_array = malloc(sizeof(char *) * allowedsize);
         char split_on[2] = " ";
-
         char * temp = strtok(command, split_on);
+        int idx = 0,allowedsize = 128;
+        char ** temp_array = malloc(sizeof(char *) * allowedsize); 
         while (temp != NULL){
                 temp_array[idx] = temp;
-                idx++;
+                ++idx;
                 temp = strtok(NULL, split_on);
         }
         temp_array[idx] = NULL;
+        //store null pointer at last of the input array.
         return temp_array;
 }
 int main(int argc, char ** argv){
@@ -167,13 +168,11 @@ int main(int argc, char ** argv){
         printf(COLOR_BOLD_BLUE"%s]" COLOR_CYAN "$ "COLOR_OFF,mi);
         userinput = getinput();
 		if ( strcmp(userinput, "") == 0 ){
-            // incase of empty input
 			continue;
 		}
         input = split_input(userinput);
         int returnvalue =runcommands(input);
         if(returnvalue==2){
-            //incase of exit we need to break the infinte loop
             flag=false;
             }
         }
