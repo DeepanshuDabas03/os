@@ -49,13 +49,33 @@ int cd(char **array){
 }
 int pwdfunc(char ** array){
     //update pwd then print
-    cwd(pwd);
-	printf("Present working directory(pwd) is: %s\n",pwd);
-	return 1;
+    if(array[1]==NULL){
+        cwd(pwd);
+	    printf("Present working directory(pwd) is: %s\n",pwd);
+	    return 1;
+    }
+    if(strcmp(array[1],"-P")==0){
+        cwd(pwd);
+        printf("%s\n",pwd);
+        return 1;
+    }
+    if(strcmp(array[1],"-L")==0){
+        cwd(pwd);
+        printf("You choose -L.PWD is:%s\n",pwd);
+        return 1;
+    }   
 }
 int echo(char ** array){
     int i = 0;
     bool flag=true;
+    int mne=0;
+    if(strcmp(array[1],"-n")==0){
+        mne=1;
+        ++i;
+    }
+    if(strcmp(array[1],"--help")==0){
+        printf("ECHO(1)                      User Commands                     ECHO(1) \n NAME \necho - display a line of text\n DESCRIPTION\nEcho the STRING(s) to standard output.\n -n     do not output the trailing newline\n");
+    }
 	while (flag){
         ++i;
 		if (array[i] == NULL){
@@ -65,15 +85,18 @@ int echo(char ** array){
 		}
 		printf("%s ", array[i]);
 	}
+    if(mne){
+        return 1;
+    }
 	printf("\n");
     return 1;
 }
 int exitfunc(char ** array){
-	return 2;
+	return 58;
 }
 int start_process(char ** array){
     
-    pid_t p1, p2;
+    pid_t p1;
     p1= fork();
     if (p1 == 0){
 	    char commandpath[2048];
@@ -81,19 +104,13 @@ int start_process(char ** array){
 	    strcat(commandpath, array[0]);	
 	    if ( execv( commandpath, array ) == -1){
 		    printf("Error: Command Not found\n");
-	    }
-	    exit(EXIT_SUCCESS);	
+	    }	
     }
     else if (p1 < 0){
-		perror("Error:Process can't be created");
+		printf("Error:Process can't be created\n");
     }
     else{      
-        int status;     
-        do{
-            p2 = waitpid(p1, &status, WUNTRACED);
-            //WUNTRACED flag to request status information from stopped processes as well as processes that have terminated.
-        } 
-        while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        wait(NULL);
     }
     return 1;
 }
@@ -172,7 +189,7 @@ int main(int argc, char ** argv){
 		}
         input = split_input(userinput);
         int returnvalue =runcommands(input);
-        if(returnvalue==2){
+        if(returnvalue==58){
             flag=false;
             }
         }
