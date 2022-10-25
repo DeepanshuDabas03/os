@@ -72,6 +72,9 @@ int echo(char ** array){
     int i = 0;
     bool flag=true;
     int mne=0;
+    if(array[1]==NULL){
+        printf("\n");return 1;
+    }
     if(strcmp(array[1],"-n")==0){
         mne=1;
         ++i;
@@ -174,6 +177,7 @@ char ** split_input(char * command){
                 ++idx;
                 temp = strtok(NULL, split_on);
         }
+        if(idx-1>0)
         if(strcmp(temp_array[idx-1],"&t")==0){
             tr=1;
             temp_array[idx-1]=NULL;
