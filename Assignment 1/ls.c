@@ -85,7 +85,7 @@ int main(int argc, char **array)
 			{
 				if (i_option_run == 1)
 				{
-					printf("%-7ld %s\n", listmydirectory[var].d_ino,listmydirectory[var]->d_name);
+					printf("%-7ld %s\n", listmydirectory[var]->d_ino,listmydirectory[var]->d_name);
 					continue;
 				}
 				if(a==1){
