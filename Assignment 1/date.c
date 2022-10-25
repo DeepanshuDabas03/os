@@ -17,8 +17,9 @@ int main(int argc,char **array) {
 		struct tm *utc=gmtime(&t);
 		if(utc==NULL){
 			printf("date:error unable to handle process right now \n");
+            return 1;
 		}
-		printf("Time in UTC : %s\n",asctime(utc));
+		printf("Time in UTC : %s",asctime(utc));
     }
     else if(strcmp(array[1],"-r")==0){
         struct stat attr;
