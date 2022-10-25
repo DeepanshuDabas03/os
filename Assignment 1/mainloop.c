@@ -56,8 +56,11 @@ int pwdfunc(char ** array){
 	    return 1;
     }
     if(strcmp(array[1],"-P")==0){
-        cwd(pwd);
-        printf("%s\n",pwd);
+        char *path, *canon_path;
+        path = getcwd(NULL, 1024);
+        canon_path = realpath(path, NULL);
+        free(path);
+        printf("%s\n",canon_path);
         return 1;
     }
     if(strcmp(array[1],"-L")==0){
