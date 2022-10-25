@@ -71,7 +71,7 @@ int main(int argc, char **array)
 		{
 			for (int k = j + 1; k < var; k++)
 			{
-				if (comparetostring(listmydirectory[j]->d_name, listmydirectory[k]->d_name) > 0)
+				if (comparetostring(listmydirectory[j].d_name, listmydirectory[k].d_name) > 0)
 				{
 					temp = listmydirectory[k];
 					listmydirectory[k] = listmydirectory[j];
@@ -81,19 +81,19 @@ int main(int argc, char **array)
 		}
 		for (var = 0; listmydirectory[var] != NULL; ++var)
 		{
-			if ((listmydirectory[var]->d_name)[0] != '.' || a == 1)
+			if ((listmydirectory[var].d_name)[0] != '.' || a == 1)
 			{
 				if (i_option_run == 1)
 				{
-					printf("%-7ld %s\n", listmydirectory[var]->d_ino,listmydirectory[var]->d_name);
+					printf("%-7ld %s\n", listmydirectory[var].d_ino,listmydirectory[var].d_name);
 					continue;
 				}
 				if(a==1){
-					printf("%s\n", listmydirectory[var]->d_name);
+					printf("%s\n", listmydirectory[var].d_name);
 					continue;
 				}
-				else if((listmydirectory[var]->d_name)[0] != '.'){
-					printf("%s\n", listmydirectory[var]->d_name);
+				else if((listmydirectory[var].d_name)[0] != '.'){
+					printf("%s\n", listmydirectory[var].d_name);
 				}
 			}
 		}
