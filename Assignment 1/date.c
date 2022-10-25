@@ -27,8 +27,14 @@ int main(int argc,char **array) {
             printf("date: option requires an argument -- '%s'\n",array[1]);
             return 1;
         }
-        stat(array[2], &attr);
-        printf("Last modified time: %s", ctime(&attr.st_mtime));
+        if(stat(array[2], &attr)==0){
+            printf("Last modified time: %s", ctime(&attr.st_mtime));
+            return 1;
+        }
+        else{
+            printf("date: %s: No such file or directory\n",array[2]);
+            return 1;
+        }
     }
     else{
         printf("date: error invalid option\n");
