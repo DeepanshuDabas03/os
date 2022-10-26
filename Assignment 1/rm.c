@@ -44,7 +44,9 @@ int main(int argc,char **array){
                     return 1;
                 }
                 else if(option=='Y'){
-                    unlink(array[i]);
+                    if ( unlink(array[i]) < 0 ){
+			            printf("rm: error can't remove file\n");
+		    }
                 }
             }
         }
