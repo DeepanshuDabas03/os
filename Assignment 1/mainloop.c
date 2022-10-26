@@ -16,16 +16,16 @@ char *in;
 int tr=0;
 //defining 2d array to store our commands. 
 int cd(char **array){
-    if(array[1]==NULL){
+    if(array[1]==NULL || strcmp(array[1],"~")==0 || strcmp(array[1],"--")==0){
         //if no arrguments are specified we need to change our directory to home which is "/"
-        chdir("/");
+        chdir("/home/deepanshu/");
     }
     else if (chdir(array[1]) < 0){
         //if we are not able to change our directory we need to produce a error
 		perror("Error");
 	}
     cwd(pwd);
-    if(strcmp(pwd,"/")==0){
+    if(strcmp(pwd,"/home/deepanshu")==0){
         mi="~";
     }
     else{
