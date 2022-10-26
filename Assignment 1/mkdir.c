@@ -9,7 +9,7 @@ int main(int argc, char ** array){
 		return 0;
 	}
     if(strcmp(array[1],"-m")==0){
-        if(argc<3){
+        if(argc<4){
             printf("mkdir: missing operand\n");
             return 1;
         }
