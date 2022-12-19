@@ -25,9 +25,9 @@ void *philospher(void*pointer)
             {
                 eat++;
             }
+            printf("Philospher %d is done eating\n",i+1);
             pthread_mutex_unlock(&forks[left]);
             pthread_mutex_unlock(&forks[right]);
-            printf("Philospher %d is done eating\n",i+1);
             sleep(1);
         }
     }
@@ -45,9 +45,9 @@ void *philospher(void*pointer)
             {
                 eat++;
             }
+            printf("Philospher %d is done eating\n",i+1);
             pthread_mutex_unlock(&forks[right]);
             pthread_mutex_unlock(&forks[left]);
-            printf("Philospher %d is done eating\n",i+1);
             sleep(1);
         }
     }
