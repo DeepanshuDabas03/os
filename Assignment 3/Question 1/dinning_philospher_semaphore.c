@@ -31,9 +31,9 @@ void *philospher(void *pointer)
         {
             eat++;
         }
+        printf("Philospher %d is done eating\n",i+1);
         sem_post(&forks[left]);
         sem_post(&forks[right]);
-         printf("Philospher %d is done eating\n",i+1);
         sleep(1);
     }
 }
