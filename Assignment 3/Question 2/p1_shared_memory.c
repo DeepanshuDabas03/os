@@ -72,6 +72,7 @@ int main()
             a[2] = '\0';
         }
         while (strcmp(str, a) != 0);
+        printf("Recieved Index:%s\n",str);
     }
     shmdt(str);
     return 0;
