@@ -91,10 +91,10 @@
 #include <linux/kcov.h>
 #include <linux/thread_info.h>
 char buf[PATH_MAX];
-static char *process = "blah";
+static int process = 0;
 char *path_command ;
-module_param(process, charp, 0000);
-MODULE_PARM_DESC(process, "A character string");
+module_param(process, int, 0);
+MODULE_PARM_DESC(process, "Give pid:");
 struct file *get_mm_exe_file(struct mm_struct *mm)
 {
 	struct file *exe_file;
@@ -121,21 +121,7 @@ struct file *get_task_exe_file(struct task_struct *task)
 	task_unlock(task);
 	return exe_file;
 }
-int strcmp(const char *cs, const char *ct)
-{
-	unsigned char c1, c2;
 
-	while (1)
-	{
-		c1 = *cs++;
-		c2 = *ct++;
-		if (!c1)
-			break;
-		if (c1 != c2)
-			return c1 < c2 ? -1 : 1;
-	}
-	return 0;
-}
 static int task_init(void)
 {
 	struct task_struct *task_list;
@@ -143,7 +129,7 @@ static int task_init(void)
 	int flag = 0;
 	for_each_process(task_list)
 	{
-		if (strcmp(process, task_list->comm) == 0)
+		if(task_list->pid == process)
 		{
 			flag = 1;
 			break;
